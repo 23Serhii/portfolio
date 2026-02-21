@@ -49,6 +49,8 @@ const Desc = styled.div`
   }
 `;
 
+
+
 const Education = () => {
   return (
     <Container id="Education">

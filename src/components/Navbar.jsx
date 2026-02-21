@@ -221,7 +221,7 @@ const Navbar = () => {
     <Nav>
       <NavbarContainer>
         <NavLogo to="/">
-          Kasasa <span>Trevor</span>
+          Serhii <span>Opanasenko</span>
         </NavLogo>
 
         <MobileIcon onClick={() => setIsOpen(!isOpen)}>

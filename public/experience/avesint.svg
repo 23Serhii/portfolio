@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+    <defs>
+        <radialGradient id="bg" cx="30%" cy="20%" r="85%">
+            <stop offset="0%" stop-color="#7C5CFF" stop-opacity="0.30"/>
+            <stop offset="55%" stop-color="#7C5CFF" stop-opacity="0.10"/>
+            <stop offset="100%" stop-color="#070812" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="stroke" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#7C5CFF" stop-opacity="0.95"/>
+            <stop offset="100%" stop-color="#4F46E5" stop-opacity="0.95"/>
+        </linearGradient>
+        <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="6" result="b"/>
+            <feColorMatrix in="b" type="matrix"
+                           values="1 0 0 0 0
+                0 1 0 0 0
+                0 0 1 0 0
+                0 0 0 0.55 0"/>
+            <feMerge>
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+    </defs>
+
+    <!-- base -->
+    <rect x="18" y="18" width="220" height="220" rx="56" fill="#0B0D1B"/>
+    <rect x="18" y="18" width="220" height="220" rx="56" fill="url(#bg)"/>
+    <rect x="18" y="18" width="220" height="220" rx="56" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="2"/>
+
+    <!-- “A” mark (stylized) -->
+    <g filter="url(#glow)">
+        <path d="M128 62 L182 176 H160 L145 144 H111 L96 176 H74 L128 62 Z"
+              fill="none" stroke="url(#stroke)" stroke-width="12" stroke-linejoin="round"/>
+        <path d="M119 124 H137" stroke="url(#stroke)" stroke-width="12" stroke-linecap="round"/>
+    </g>
+
+    <!-- small “radar” dots -->
+    <circle cx="188" cy="78" r="5" fill="#7C5CFF" opacity="0.9"/>
+    <circle cx="200" cy="92" r="3" fill="#7C5CFF" opacity="0.55"/>
+    <circle cx="66" cy="182" r="4" fill="#7C5CFF" opacity="0.55"/>
+</svg>

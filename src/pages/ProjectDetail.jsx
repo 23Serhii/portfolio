@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { projects } from "../data/constants";
 import { ArrowBack, GitHub, Launch, Code, Storage, Cloud, CheckCircle, Warning } from "@mui/icons-material";
+
 
 const Container = styled(motion.div)`
   min-height: 100vh;
@@ -14,6 +15,76 @@ const Container = styled(motion.div)`
   @media (max-width: 768px) {
     padding: 60px 16px 40px;
   }
+`;
+
+const FeaturedBadge = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: ${({ theme }) => theme.primary + "22"};
+  border: 1px solid ${({ theme }) => theme.primary + "55"};
+  color: ${({ theme }) => theme.primary};
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.4px;
+`;
+
+const MetricsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+`;
+
+const MetricCard = styled(motion.div)`
+  background: ${({ theme }) => theme.card};
+  border: 1px solid ${({ theme }) => theme.card_light};
+  border-radius: 12px;
+  padding: 18px;
+`;
+
+const MetricValue = styled.div`
+  font-size: 34px;
+  font-weight: 800;
+  color: ${({ theme }) => theme.text_primary};
+`;
+
+const MetricLabel = styled.div`
+  margin-top: 6px;
+  font-size: 13px;
+  color: ${({ theme }) => theme.text_secondary};
+`;
+
+const ArchGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+`;
+
+const ArchNode = styled(motion.div)`
+  background: ${({ theme }) => theme.card};
+  border: 1px solid ${({ theme }) => theme.card_light};
+  border-radius: 12px;
+  padding: 16px;
+`;
+
+const ArchTitle = styled.div`
+  font-weight: 700;
+  color: ${({ theme }) => theme.text_primary};
+`;
+
+const ArchDesc = styled.div`
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: ${({ theme }) => theme.text_secondary};
+`;
+
+const FlowList = styled.ul`
+  margin: 14px 0 0;
+  padding-left: 18px;
 `;
 
 const BackButton = styled(motion.button)`
@@ -92,6 +163,14 @@ const TagsContainer = styled(motion.div)`
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 10px;
+`;
+
+const ProjectVideo = styled(motion.video)`
+  width: 100%;
+  max-height: 450px;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
 `;
 
 const Tag = styled.span`
@@ -323,6 +402,28 @@ const ProjectDetail = () => {
 
   const project = projects.find(p => p.id === parseInt(id));
 
+  const [metricTicks, setMetricTicks] = useState({});
+
+  useEffect(() => {
+    if (!project?.metrics) return;
+
+    const duration = 900; // ms
+    const start = performance.now();
+
+    const tick = (now) => {
+      const t = Math.min(1, (now - start) / duration);
+      const next = {};
+      project.metrics.forEach((m, idx) => {
+        const target = Number(m.value) || 0;
+        next[idx] = Math.round(target * t);
+      });
+      setMetricTicks(next);
+      if (t < 1) requestAnimationFrame(tick);
+    };
+
+    requestAnimationFrame(tick);
+  }, [project?.id]);
+
   if (!project) {
     return (
       <Container
@@ -351,9 +452,7 @@ const ProjectDetail = () => {
       exit={{ opacity: 0 }}
     >
       <Helmet>
-        <title>{project.title} | Kasasa Trevor</title>
-        <meta name="description" content={project.description} />
-        <link rel="canonical" href={`https://kasasalivingstonetrevor.me/projects/${project.id}`} />
+        <title>{project.title} | Serhii Opanasenko </title>
       </Helmet>
       <Content>
         <BackButton
@@ -365,13 +464,30 @@ const ProjectDetail = () => {
         </BackButton>
 
         <Header>
-          <ProjectImage
-            src={project.image}
-            alt={project.title}
-            variants={itemVariants}
-          />
+          {project.video ? (
+              <ProjectVideo
+                  src={project.video}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  variants={itemVariants}
+              />
+          ) : (
+              <ProjectImage
+                  src={project.image}
+                  alt={project.title}
+                  variants={itemVariants}
+              />
+          )}
 
           <TitleSection>
+            {project.featured && (
+                <FeaturedBadge>
+                  <CheckCircle fontSize="small" /> Featured Project
+                </FeaturedBadge>
+            )}
             <Title variants={itemVariants}>{project.title}</Title>
             {project.subtitle && <Subtitle variants={itemVariants}>{project.subtitle}</Subtitle>}
             <DateText>{project.date}</DateText>
@@ -403,6 +519,26 @@ const ProjectDetail = () => {
           </SectionTitle>
           <Description>{project.fullDescription || project.description}</Description>
         </Section>
+
+        {project.metrics && project.metrics.length > 0 && (
+            <Section variants={itemVariants}>
+              <SectionTitle>
+                <Storage /> Metrics
+              </SectionTitle>
+
+              <MetricsGrid>
+                {project.metrics.map((m, idx) => (
+                    <MetricCard key={idx} variants={itemVariants} whileHover={{ scale: 1.02 }}>
+                      <MetricValue>
+                        {(metricTicks[idx] ?? 0)}
+                        {m.suffix || ""}
+                      </MetricValue>
+                      <MetricLabel>{m.label}</MetricLabel>
+                    </MetricCard>
+                ))}
+              </MetricsGrid>
+            </Section>
+        )}
 
         {project.features && project.features.length > 0 && (
           <Section variants={itemVariants}>
@@ -442,6 +578,38 @@ const ProjectDetail = () => {
               ))}
             </TechStackGrid>
           </Section>
+        )}
+
+        {project.architecture && (
+            <Section variants={itemVariants}>
+              <SectionTitle>
+                <Cloud /> Architecture Diagram
+              </SectionTitle>
+
+              {project.architecture.nodes?.length > 0 && (
+                  <ArchGrid>
+                    {project.architecture.nodes.map((n, idx) => (
+                        <ArchNode key={idx} variants={itemVariants} whileHover={{ scale: 1.02 }}>
+                          <ArchTitle>{n.title}</ArchTitle>
+                          <ArchDesc>{n.desc}</ArchDesc>
+                        </ArchNode>
+                    ))}
+                  </ArchGrid>
+              )}
+
+              {project.architecture.flows?.length > 0 && (
+                  <ListCard style={{ marginTop: 18 }} variants={itemVariants}>
+                    <ListTitle type="outcome">
+                      <CheckCircle /> Data Flow
+                    </ListTitle>
+                    <FlowList>
+                      {project.architecture.flows.map((f, idx) => (
+                          <ListItem key={idx}>{f}</ListItem>
+                      ))}
+                    </FlowList>
+                  </ListCard>
+              )}
+            </Section>
         )}
 
         {(project.challenges || project.outcomes) && (

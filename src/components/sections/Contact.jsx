@@ -172,8 +172,8 @@ const Divider = styled.div`
 `;
 
 const Contact = () => {
-  const phoneNumber = "256704967769"; // Uganda country code + number
-  const whatsappMessage = encodeURIComponent("Hi Trevor! I visited your portfolio and would like to connect with you.");
+  const phoneNumber = "380739878325";
+  const whatsappMessage = encodeURIComponent("Hi Serhii! I visited your portfolio and would like to connect with you.");
 
   return (
     <Container id="Contact">
@@ -224,31 +224,31 @@ const Contact = () => {
               </IconWrapper>
               <ContactInfo>
                 <ContactLabel>WhatsApp</ContactLabel>
-                <ContactValue>+256 704 967 769</ContactValue>
+                <ContactValue>+380 73 987 83 25</ContactValue>
               </ContactInfo>
             </ContactItem>
 
             <ContactItem
-              href="tel:+256704967769"
+              href="tel:+380739878325"
             >
               <IconWrapper $color="#854CE6">
                 <Phone />
               </IconWrapper>
               <ContactInfo>
                 <ContactLabel>Phone</ContactLabel>
-                <ContactValue>+256 704 967 769</ContactValue>
+                <ContactValue>+380 73 987 83 25</ContactValue>
               </ContactInfo>
             </ContactItem>
 
             <ContactItem
-              href="mailto:kasasatrevor25@gmail.com"
+              href="mailto:opanasenkoserhii@gmail.com"
             >
               <IconWrapper $color="#EA4335">
                 <Email />
               </IconWrapper>
               <ContactInfo>
                 <ContactLabel>Email</ContactLabel>
-                <ContactValue>kasasatrevor25@gmail.com</ContactValue>
+                <ContactValue>opanasenkoserhii@gmail.com</ContactValue>
               </ContactInfo>
             </ContactItem>
 
@@ -258,7 +258,7 @@ const Contact = () => {
               </IconWrapper>
               <ContactInfo>
                 <ContactLabel>Location</ContactLabel>
-                <ContactValue>Kampala, Uganda</ContactValue>
+                <ContactValue>Donbass, Ukraine</ContactValue>
               </ContactInfo>
             </ContactItem>
           </ContactCard>

@@ -210,7 +210,16 @@ const Button = styled.a`
     }
   `}
 `;
+const Video = styled.video`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
 
+  ${Card}:hover & {
+    transform: scale(1.05);
+  }
+`;
 const ViewMoreText = styled.span`
   font-size: 12px;
   color: ${({ theme }) => theme.text_secondary + "80"};
@@ -246,7 +255,19 @@ const ProjectCard = ({ project }) => {
       transition={{ duration: 0.3 }}
     >
       <ImageContainer>
-        <Image src={project.image} alt={project.title} />
+        {project.video ? (
+            <Video
+                src={project.video}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+            />
+        ) : (
+            <Image src={project.image} alt={project.title} />
+        )}
+
         <ImageOverlay>
           <OverlayButton as="span" title="View Details">
             <OpenInNew fontSize="small" />

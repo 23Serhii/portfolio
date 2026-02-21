@@ -164,9 +164,9 @@ const AllProjects = () => {
       exit="exit"
     >
       <Helmet>
-        <title>Projects | Kasasa Livingstone Trevor - Software Engineer</title>
-        <meta name="description" content="Browse software projects by Kasasa Livingstone Trevor - Full stack web applications, mobile apps, and platforms built with React, Node.js, Python, Flutter." />
-        <link rel="canonical" href="https://kasasalivingstonetrevor.me/projects" />
+        <title>Projects | Serhii Opanasenko - Developer</title>
+        <meta name="description" content="Browse software projects by Serhii Opanasenko - Full stack web applications, mobile apps, and platforms built with React, Node.js, Python, Flutter." />
+        <link rel="canonical" href="https://github.com/23Serhii"/>
       </Helmet>
       <Content>
         <BackButton onClick={() => navigate("/")}>

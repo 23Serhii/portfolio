@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://kasasalivingstonetrevor.me/sitemap.xml
+# Sitemap: https://kasasalivingstonetrevor.me/sitemap.xml
