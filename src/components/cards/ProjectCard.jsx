@@ -150,7 +150,7 @@ const Date = styled.div`
   margin-left: 2px;
   margin-top: 4px;
   font-weight: 400;
-  color: ${({ theme }) => theme.text_secondary + "99"};
+  color: rgba(255, 255, 255, 0.65);
 
   @media only screen and (max-width: 768px) {
     font-size: 10px;
@@ -222,11 +222,16 @@ const Video = styled.video`
 `;
 const ViewMoreText = styled.span`
   font-size: 12px;
-  color: ${({ theme }) => theme.text_secondary + "80"};
   text-align: center;
   margin-top: 8px;
+  font-weight: 500;
+
+  /* 🔹 базовий стан — як карточка */
+  color: rgba(255, 255, 255, 0.55);
+
   transition: color 0.3s ease;
 
+  /* 🔥 hover по карточці — фіолетовий */
   ${Card}:hover & {
     color: ${({ theme }) => theme.primary};
   }

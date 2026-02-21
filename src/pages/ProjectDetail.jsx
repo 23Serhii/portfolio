@@ -155,7 +155,8 @@ const Subtitle = styled(motion.p)`
 
 const DateText = styled.span`
   font-size: 14px;
-  color: ${({ theme }) => theme.text_secondary};
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
 `;
 
 const TagsContainer = styled(motion.div)`

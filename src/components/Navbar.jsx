@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link as LinkR, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Bio } from "../data/constants";
@@ -131,29 +131,41 @@ const MobileIcon = styled.div`
 
 const MobileMenuOverlay = styled(motion.div)`
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 99;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(8px);
+  z-index: 999;
 `;
 
 const MobileMenu = styled(motion.div)`
   position: fixed;
   top: 0;
   right: 0;
-  width: 280px;
+  width: min(86vw, 320px);
   height: 100vh;
-  background: ${({ theme }) => theme.card};
-  z-index: 100;
+
+  /* ✅ непрозорий фон */
+  background: ${({ theme }) => theme.bg};                 /* або theme.card */
+  background: linear-gradient(
+      180deg,
+      ${({ theme }) => theme.bg} 0%,
+      ${({ theme }) => theme.bg} 100%
+  );
+
+  z-index: 1000;
   display: flex;
   flex-direction: column;
-  padding: 80px 30px 30px;
-  gap: 24px;
-  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
-`;
+  padding: 78px 22px 22px;
+  gap: 18px;
 
+  /* ✅ чітка межа + тінь */
+  border-left: 1px solid ${({ theme }) => theme.card_light};
+  box-shadow: -18px 0 50px rgba(0,0,0,0.65);
+
+  /* ✅ щоб точно не було “прозорості” від ефектів */
+  opacity: 1;
+  backdrop-filter: none;
+`;
 const MobileMenuHeader = styled.div`
   position: absolute;
   top: 20px;
@@ -216,7 +228,10 @@ const Navbar = () => {
     }
     setIsOpen(false);
   };
-
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => (document.body.style.overflow = "");
+  }, [isOpen]);
   return (
     <Nav>
       <NavbarContainer>
@@ -230,7 +245,7 @@ const Navbar = () => {
 
         <NavItems>
           <NavLink href="/#About" onClick={(e) => handleNavClick(e, "About")}>About</NavLink>
-          <NavLink href="/#Skills" onClick={(e) => handleNavClick(e, "Skills")}>Skills</NavLink>
+          <NavLink href="/#skills" onClick={(e) => handleNavClick(e, "skills")}>Skills</NavLink>
           <NavLink href="/#Experience" onClick={(e) => handleNavClick(e, "Experience")}>Experience</NavLink>
           <NavLink href="/#Projects" onClick={(e) => handleNavClick(e, "Projects")}>Projects</NavLink>
           <NavLink href="/#Education" onClick={(e) => handleNavClick(e, "Education")}>Education</NavLink>

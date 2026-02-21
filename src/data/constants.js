@@ -19,6 +19,7 @@ export const Bio = {
   email: "opanasenkoserhii@gmail.com",
   telegram: "@c3rh11",
   location: "Ukraine, Kyiv",
+  resume: "/resume/Serhii_Opanasenko_Resume.pdf",
 };
 
 // helper for tech icons

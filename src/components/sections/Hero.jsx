@@ -12,12 +12,14 @@ import {
   headTextAnimation,
 } from "../../utils/motion";
 import StarCanvas from "../canvas/Stars";
-
+const handleResumeClick = () => {
+  window.open(`${process.env.PUBLIC_URL}/resume/Serhii_Opanasenko_Resume.pdf`, "_blank");
+};
 const HeroContainer = styled.div`
   display: flex;
   justify-content: center;
   position: relative;
-  padding: 80px 30px;
+  padding: clamp(44px, 7vw, 80px) clamp(14px, 4vw, 30px);
   z-index: 1;
 
   @media (max-width: 960px) {
@@ -75,9 +77,10 @@ const HeroRightContainer = styled.div`
 
 const Title = styled.div`
   font-weight: 700;
-  font-size: 50px;
+  font-size: clamp(30px, 6vw, 50px);
+  line-height: 1.12;
   color: ${({ theme }) => theme.text_primary};
-  line-height: 68px;
+  
 
   @media (max-width: 960px) {
     text-align: center;
@@ -92,11 +95,16 @@ const Title = styled.div`
 
 const TextLoop = styled.div`
   font-weight: 600;
-  font-size: 32px;
+  font-size: clamp(16px, 3.8vw, 32px);
+  line-height: 1.25;
+  gap: 10px;
+
+  @media (max-width: 960px) {
+    justify-content: center;
+  }
   display: flex;
-  gap: 12px;
   color: ${({ theme }) => theme.text_primary};
-  line-height: 68px;
+
 
   @media (max-width: 960px) {
     text-align: center;
@@ -115,9 +123,15 @@ const Span = styled.div`
 `;
 
 const SubTitle = styled.div`
-  font-size: 20px;
-  line-height: 32px;
-  margin-bottom: 42px;
+  font-size: clamp(14px, 3.6vw, 20px);
+  line-height: 1.7;
+  margin-bottom: clamp(22px, 4vw, 42px);
+  padding-right: 14px;
+
+  @media (max-width: 960px) {
+    padding-right: 0;
+  }
+
   color: ${({ theme }) => theme.text_primary + 95};
 
   @media (max-width: 960px) {
@@ -139,7 +153,9 @@ const ResumeButton = styled.a`
   width: 95%;
   max-width: 300px;
   text-align: center;
-  padding: 16px 0;
+  padding: 14px 0;
+  font-size: clamp(15px, 3.5vw, 18px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
 
   background: hsla(271, 100%, 50%, 1);
   background: linear-gradient(
@@ -157,15 +173,12 @@ const ResumeButton = styled.a`
     hsla(271, 100%, 50%, 1) 0%,
     hsla(294, 100%, 50%, 1) 100%
   );
-  box-shadow: 20px 20px 60px #1f2634, -20px -20px 60px #1f2634;
   border-radius: 50px;
   font-weight: 600;
-  font-size: 20px;
 
      &:hover {
         transform: scale(1.05);
     transition: all 0.4s ease-in-out;
-    box-shadow:  20px 20px 60px #1F2634,
     filter: brightness(1);
     }    
     
@@ -181,8 +194,8 @@ const Img = styled.img`
   border-radius: 50%;
   width: 100%;
   height: 100%;
-  max-width: 400px;
-  max-height: 400px;
+  max-width: clamp(220px, 45vw, 400px);
+  max-height: clamp(220px, 45vw, 400px);
   border: 2px solid ${({ theme }) => theme.primary};
 
   @media (max-width: 640px) {
@@ -249,8 +262,11 @@ const Hero = () => {
                 <SubTitle>{Bio.description}</SubTitle>
               </motion.div>
 
-              <ResumeButton href={Bio.resume} target="_blank">
-                Check Resume
+              <ResumeButton
+                  as="button"
+                  onClick={() => window.open("/resume/Serhii_Opanasenko_Resume.pdf", "_blank")}
+              >
+                View Resume
               </ResumeButton>
             </HeroLeftContainer>
             <HeroRightContainer>
