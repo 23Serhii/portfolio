@@ -29,6 +29,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
+          timeout: 30m
           script: |
             cd /home/ubuntu/portfolio
             docker build -t my-portfolio .
