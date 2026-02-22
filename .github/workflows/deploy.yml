@@ -39,5 +39,5 @@ jobs:
             docker load < portfolio.tar
             docker stop portfolio-app || true
             docker rm portfolio-app || true
-            docker run -d -p 80:80 --name portfolio-app my-portfolio
+            docker run -d -p 8080:80 --name portfolio-app my-portfolio
             rm portfolio.tar
