@@ -298,7 +298,7 @@ export const projects = [
     tags: ["React","TypeScript","Node.js","REST API","JWT","PostgreSQL","Vercel","Docker"],
     category: "web app",
     github: "https://github.com/23Serhii/IThingy-Labs",
-    webapp: "https://i-thingy-labs.vercel.app",
+    webapp: "https://www.ithingy.dev/",
     features: [
       {
         title: "Authentication & Authorization",

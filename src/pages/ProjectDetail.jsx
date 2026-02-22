@@ -507,7 +507,7 @@ const ProjectDetail = () => {
               )}
               {project.webapp && (
                 <ActionButton href={project.webapp} target="_blank" rel="noopener noreferrer">
-                  <Launch /> Live Demo
+                  <Launch /> Live
                 </ActionButton>
               )}
             </ButtonGroup>
