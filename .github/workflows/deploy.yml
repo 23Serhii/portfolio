@@ -1,0 +1,43 @@
+name: Deploy Portfolio to Oracle Cloud
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Завантаження коду
+        uses: actions/checkout@v4
+
+      - name: Збірка сайту (На потужних серверах GitHub)
+        run: |
+          docker build -t my-portfolio .
+          docker save my-portfolio > portfolio.tar
+
+      - name: Відправка готового архіву на сервер
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "portfolio.tar"
+          target: "/home/ubuntu/"
+
+      - name: Запуск сайту на сервері
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /home/ubuntu
+            docker load < portfolio.tar
+            docker stop portfolio-app || true
+            docker rm portfolio-app || true
+            docker run -d -p 8080:80 --name portfolio-app my-portfolio
+            rm portfolio.tar

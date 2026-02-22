@@ -10,7 +10,7 @@ COPY package*.json ./
 
 # Встановлюємо всі залежності (те, що в node_modules)
 RUN npm install
-
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 # Копіюємо весь інший вихідний код проєкту
 COPY . .
 
