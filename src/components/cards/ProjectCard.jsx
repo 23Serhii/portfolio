@@ -1,3 +1,4 @@
+import React, { useRef, useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { motion } from "framer-motion";
@@ -36,13 +37,25 @@ const ImageContainer = styled.div`
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 0 16px 2px rgba(0, 0, 0, 0.3);
+  background-color: ${({ theme }) => theme.card_light || "#1a1a24"}; // Фалбек фон поки вантажиться
 `;
 
 const Image = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
+  transition: transform 0.4s ease, opacity 0.3s ease;
+
+  ${Card}:hover & {
+    transform: scale(1.05);
+  }
+`;
+
+const Video = styled.video`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease, opacity 0.3s ease;
 
   ${Card}:hover & {
     transform: scale(1.05);
@@ -62,6 +75,7 @@ const ImageOverlay = styled.div`
   align-items: center;
   justify-content: center;
   gap: 12px;
+  z-index: 10;
 
   ${Card}:hover & {
     opacity: 1;
@@ -210,38 +224,84 @@ const Button = styled.a`
     }
   `}
 `;
-const Video = styled.video`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
 
-  ${Card}:hover & {
-    transform: scale(1.05);
-  }
-`;
 const ViewMoreText = styled.span`
   font-size: 12px;
   text-align: center;
   margin-top: 8px;
   font-weight: 500;
-
-  /* 🔹 базовий стан — як карточка */
   color: rgba(255, 255, 255, 0.55);
-
   transition: color 0.3s ease;
 
-  /* 🔥 hover по карточці — фіолетовий */
   ${Card}:hover & {
     color: ${({ theme }) => theme.primary};
   }
 `;
 
+// --- КОМПОНЕНТ ВІДЕО З АВТОПЛЕЄМ ---
+const VideoAutoPlay = ({ src, poster, onReady, className, style }) => {
+  const ref = useRef(null);
+  const isReadyRef = useRef(false);
+  const onReadyRef = useRef(onReady);
+
+  useEffect(() => {
+    onReadyRef.current = onReady;
+  }, [onReady]);
+
+  const handleReady = useCallback(() => {
+    if (!isReadyRef.current) {
+      isReadyRef.current = true;
+      onReadyRef.current();
+    }
+  }, []);
+
+  // Перевірка чи відео вже в кеші
+  useEffect(() => {
+    if (ref.current && ref.current.readyState >= 2) {
+      handleReady();
+    }
+  }, [handleReady]);
+
+  // Розрив дедлоку - примусовий старт
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+
+    const playPromise = v.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {});
+    }
+  }, []);
+
+  return (
+      <Video
+          ref={ref}
+          src={src}
+          className={className}
+          poster={poster}
+          style={style}
+          playsInline
+          muted
+          loop
+          controls={false}
+          preload="auto"
+          onContextMenu={(e) => e.preventDefault()}
+          tabIndex={-1}
+          controlsList="nodownload nofullscreen noremoteplayback"
+          disablePictureInPicture
+          aria-hidden="true"
+          onLoadedData={handleReady}
+          onCanPlay={handleReady}
+      />
+  );
+};
+
+// --- ОСНОВНИЙ КОМПОНЕНТ КАРТКИ ---
 const ProjectCard = ({ project }) => {
   const navigate = useNavigate();
+  const [mediaReady, setMediaReady] = useState(false);
 
   const handleCardClick = (e) => {
-    // Don't navigate if clicking on buttons
     if (e.target.closest('a')) return;
     navigate(`/projects/${project.id}`);
   };
@@ -251,65 +311,77 @@ const ProjectCard = ({ project }) => {
   };
 
   return (
-    <Card
-      onClick={handleCardClick}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      <ImageContainer>
-        {project.video ? (
-            <Video
-                src={project.video}
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="metadata"
-            />
-        ) : (
-            <Image src={project.image} alt={project.title} />
-        )}
+      <Card
+          onClick={handleCardClick}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+      >
+        <ImageContainer>
+          {/* Прев'ю (постер), яке показується доки медіа вантажиться */}
+          {!mediaReady && project.poster && (
+              <Image
+                  src={project.poster}
+                  alt={`${project.title} preview`}
+                  style={{ position: 'absolute', top: 0, left: 0, zIndex: 1 }}
+              />
+          )}
 
-        <ImageOverlay>
-          <OverlayButton as="span" title="View Details">
-            <OpenInNew fontSize="small" />
-          </OverlayButton>
-        </ImageOverlay>
-      </ImageContainer>
+          {project.video ? (
+              <VideoAutoPlay
+                  src={project.video}
+                  poster={project.poster}
+                  onReady={() => setMediaReady(true)}
+                  style={{ opacity: mediaReady ? 1 : 0 }}
+              />
+          ) : (
+              <Image
+                  src={project.image}
+                  alt={project.title}
+                  onLoad={() => setMediaReady(true)}
+                  style={{ opacity: mediaReady ? 1 : 0 }}
+              />
+          )}
 
-      <Tags>
-        {project.tags.slice(0, 4).map((tag, index) => (
-          <Tag key={index}>{tag}</Tag>
-        ))}
-        {project.tags.length > 4 && <Tag>+{project.tags.length - 4}</Tag>}
-      </Tags>
+          <ImageOverlay>
+            <OverlayButton as="span" title="View Details">
+              <OpenInNew fontSize="small" />
+            </OverlayButton>
+          </ImageOverlay>
+        </ImageContainer>
 
-      <Details>
-        <Title>{project.title}</Title>
-        {project.subtitle && <Subtitle>{project.subtitle}</Subtitle>}
-        <Date>{project.date}</Date>
-        <Description>{project.description}</Description>
-      </Details>
+        <Tags>
+          {project.tags.slice(0, 4).map((tag, index) => (
+              <Tag key={index}>{tag}</Tag>
+          ))}
+          {project.tags.length > 4 && <Tag>+{project.tags.length - 4}</Tag>}
+        </Tags>
 
-      <ButtonGroup>
-        <Button
-          href={project.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={handleGithubClick}
-        >
-          <GitHub fontSize="small" /> GitHub
-        </Button>
-        <Button primary="true" as="span">
-          <OpenInNew fontSize="small" /> Details
-        </Button>
-      </ButtonGroup>
+        <Details>
+          <Title>{project.title}</Title>
+          {project.subtitle && <Subtitle>{project.subtitle}</Subtitle>}
+          <Date>{project.date}</Date>
+          <Description>{project.description}</Description>
+        </Details>
 
-      <ViewMoreText>Click to view full project details</ViewMoreText>
-    </Card>
+        <ButtonGroup>
+          <Button
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={handleGithubClick}
+          >
+            <GitHub fontSize="small" /> GitHub
+          </Button>
+          <Button primary="true" as="span">
+            <OpenInNew fontSize="small" /> Details
+          </Button>
+        </ButtonGroup>
+
+        <ViewMoreText>Click to view full project details</ViewMoreText>
+      </Card>
   );
 };
 

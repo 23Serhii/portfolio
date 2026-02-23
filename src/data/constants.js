@@ -230,6 +230,7 @@ export const projects = [
     fullDescription:
         "AVESINT.AI is a military-oriented OSINT analytics platform built as a monorepo with a React SPA client, a NestJS API backend, and an asynchronous worker for background tasks. It provides an event feed (including AI-stream), map-based exploration, verification workflows, analytics dashboards, role-based access control, and real-time updates via WebSockets. The system is designed for scalable ingestion/processing and fast investigation workflows.",
     video: "/projects/avesint.mp4",
+    poster: "/projects/avesint-preview.png",
     tags: ["NestJS","TypeScript","PostgreSQL","Qdrant","Ollama","React","Leaflet","Docker","pnpm"],
     category: "web app",
     github: "https://github.com/23Serhii/avesint-platform",
@@ -348,6 +349,7 @@ export const projects = [
     fullDescription:
         "Dropsquad is a full-scale crypto community platform built with Angular and FastAPI. The system includes course access control, subscription/payment logic, JWT authentication, optional 2FA security layer, and PostgreSQL-based persistence. Deployed in containerized infrastructure using Docker and Kubernetes for reliability and scalability.",
     video: "/projects/dropsquad.mp4",
+    poster: "/projects/dropsquad-preview.png",
     tags: ["Angular","FastAPI","PostgreSQL","JWT","2FA","Kubernetes","Docker"],
     category: "web app",
     github: "",
@@ -413,6 +415,7 @@ export const projects = [
     fullDescription:
         "Tonsai is a Telegram Mini App built with React and modern state management, integrating Web3 logic and payment workflows. The platform supports secure authentication, smart contract interactions, real-time updates, and animated 3D UI elements. Designed to provide a seamless blockchain-integrated user experience inside Telegram.",
     image: "/projects/tonsai.gif",
+    poster: "/projects/tonsai-preview.png",
     tags: ["React","TypeScript","Telegram Mini Apps","Web3","TON","Redux Toolkit","Three.js","GSAP","Payments"],
     category: "web app",
     github: "https://github.com/23Serhii/front-end-tg-game",
@@ -476,7 +479,7 @@ export const projects = [
         "Lightweight shopping demo built with Flutter: catalog, details, favorites and cart with clean navigation.",
     fullDescription:
         "Shop Test is a lightweight e-commerce demo that demonstrates clean UI structure, predictable navigation, and a maintainable feature-based architecture. The app includes a product catalog, product details, favorites, and a cart experience with quantity control and totals. It’s designed as a solid base for a coding test or as a starter template for a real mobile shop.",
-    image: "/projects/shop1.png",
+    image: "/projects/shop-preview.png",
     tags: ["Flutter","Dart","Clean Architecture","Riverpod","GoRouter","Freezed","REST"],
     category: "mobile app",
     github: "https://github.com/23Serhii/shop-test-flutter",
@@ -519,7 +522,7 @@ export const projects = [
         "MERN subsystem for tracking and identifying POW-related records with user auth, admin panel, and MongoDB-powered search.",
     fullDescription:
         "POW Search Subsystem is a web system designed to help families and authorized users submit search requests and identify prisoners of war. The platform provides a structured intake form, personal user cabinet, and an administrative workflow for processing requests. It focuses on usability, secure access, and fast retrieval of relevant information through a MongoDB-backed search layer.",
-    image: "/projects/sub1.png",
+    image: "/projects/svitanok-preview.png",
     tags: ["MongoDB","Express","React","Node.js","JWT","Passport","Socket.io"],
     category: "web app",
     github: "https://github.com/23Serhii/POW-Search-Subsystem",
