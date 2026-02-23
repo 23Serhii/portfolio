@@ -258,7 +258,7 @@ const Contact = () => {
               </IconWrapper>
               <ContactInfo>
                 <ContactLabel>Location</ContactLabel>
-                <ContactValue>Donbass, Ukraine</ContactValue>
+                <ContactValue>Kyiv, Ukraine</ContactValue>
               </ContactInfo>
             </ContactItem>
           </ContactCard>
